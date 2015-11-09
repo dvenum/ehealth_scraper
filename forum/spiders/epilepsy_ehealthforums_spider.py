@@ -40,7 +40,8 @@ class ForumsSpider(CrawlSpider):
         )
 
     def cleanText(self,text):
-        soup = BeautifulSoup(text,'html.parser')
+        if not text: return ''
+        soup = BeautifulSoup(text[0],'html.parser')
         text = soup.get_text();
         text = re.sub("( +|\n|\r|\t|\0|\x0b|\xa0|\xbb|\xab)+",' ',text).strip()
         return text 
