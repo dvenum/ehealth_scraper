@@ -33,7 +33,7 @@ class ForumsSpider(CrawlSpider):
             # Rule to follow arrow to next grid
             Rule(LinkExtractor(
                 restrict_xpaths='//*/a[starts-with(@title,"Next Page")]',
-            ), follow=True),
+            ), callback='parsePost', follow=True),
         )
 
     def cleanText(self,text):
