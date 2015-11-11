@@ -55,18 +55,18 @@ class ForumsSpider(CrawlSpider):
         topic = self.cleanText(response.xpath('//*[@id="page_h1"]').extract()[0].encode('ascii'))
         url = response.url
         for post in posts:
-            post_xp = post.xpath('//*[@class="vt_post_body"]')
+            post_xp = post.xpath('./div[3]/div/div/div[1]')
             if not post_xp: continue
             post_msg = self.parseText(str=post_xp.extract()[0])
 
             item = PostItemsList()
-            item['author'] = self.cleanText(post.xpath('//*[@class="vt_asked_by_user"]/a').extract()[0].encode('ascii'))
-            item['author_link'] = post.xpath('//*[@class="vt_asked_by_user"]/a/@href').extract()[0]
-            create_date_xp = post.xpath('//*[@class="vt_reply_timestamp"]')
+            item['author'] = self.cleanText(post.xpath('./div[2]/div/span').extract()[0].encode('ascii'))
+            item['author_link'] = post.xpath('./div[2]/div/span/a/@href').extract()[0]
+            create_date_xp = post.xpath('./div[2]/div[3]/span')
             if create_date_xp:
                 item['create_date'] = self.parseText(str=create_date_xp.extract()[0]).replace('replied ','')
             else:
-                item['create_date'] = self.parseText(str=post.xpath('//*[@class="vt_first_timestamp"]').extract()[0])
+                item['create_date'] = self.parseText(str=post.xpath('./div/div[3]/div/div').extract()[0])
             item['post'] = post_msg
             item['tag'] = 'multiple-sclerosis'
             item['topic'] = topic
